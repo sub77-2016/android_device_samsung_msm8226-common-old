@@ -14,13 +14,12 @@
 # limitations under the License.
 #
 
-# qcom common
-$(call inherit-product, device/samsung/qcom-common/qcom-common.mk)
+LOCAL_PATH := device/samsung/msm8226-common
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 # The gps config appropriate for this device
-#$(call inherit-product, device/common/gps/gps_as_supl.mk)
+$(call inherit-product, device/common/gps/gps_as_supl.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -56,7 +55,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
-$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+# Boot animation
+TARGET_SCREEN_HEIGHT := 1280
+TARGET_SCREEN_WIDTH := 720
+
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -93,9 +95,14 @@ PRODUCT_PACKAGES += \
     regdbdump \
     regulatory.bin
 
-# IR
-PRODUCT_PACKAGES += \
-    consumerir.msm8226
+# Dalvik VM config for 1536MB (1.5GB) RAM devices
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.heapstartsize=8m \
+    dalvik.vm.heapgrowthlimit=128m \
+    dalvik.vm.heapsize=512m \
+    dalvik.vm.heaptargetutilization=0.75 \
+    dalvik.vm.heapminfree=2m \
+    dalvik.vm.heapmaxfree=8m
 
 # Display
 PRODUCT_PACKAGES += \
@@ -108,7 +115,8 @@ PRODUCT_PACKAGES += \
 # Ebtables
 PRODUCT_PACKAGES += \
     ebtables \
-    ethertypes
+    ethertypes \
+    libebtc
 
 # FM
 PRODUCT_PACKAGES += \
@@ -127,17 +135,16 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf \
     $(LOCAL_PATH)/configs/sap.conf:system/etc/sap.conf
 
-# IRSC
-#PRODUCT_COPY_FILES += \
-#   $(LOCAL_PATH)/configs/sec_config:system/etc/sec_config
+# IR
+PRODUCT_PACKAGES += \
+    consumerir.msm8226
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/keylayout/Button_Jack.kl:system/usr/keylayout/Button_Jack.kl \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    $(LOCAL_PATH)/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl \
-    $(LOCAL_PATH)/keylayout/sec_e-pen.idc:system/usr/idc/sec_e-pen.idc \
-    $(LOCAL_PATH)/keylayout/sec_keyboard.idc:system/usr/idc/sec_keyboard.idc \
-    $(LOCAL_PATH)/keylayout/Synaptics_HID_TouchPad.idc:system/usr/idc/Synaptics_HID_TouchPad.idc
+    $(LOCAL_PATH)/keylayout/sec_touchkey.kl:system/usr/keylayout/sec_touchkey.kl \
+    $(LOCAL_PATH)/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
 
 # Keystore
 #PRODUCT_PACKAGES += \
@@ -160,6 +167,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
     libdivxdrmdecrypt \
+    libmm-omxcore \
     libdashplayer \
     libOmxAacEnc \
     libOmxAmrEnc \
@@ -187,26 +195,19 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     init.crda.sh \
     init.qcom.bt.sh \
-    init.qcom.coex.sh \
-    init.qcom.efs.sync.sh \
-    init.qcom.fm.sh \
-    init.qcom.post_boot.sh \
-    init.qcom.wifi.sh \
-    init.ath3k.bt.sh \
-    init.qcom.audio.sh \
-    init.sec.boot.sh
+    init.qcom.wifi.sh
 
 PRODUCT_PACKAGES += \
-    init.qcom.class_core.sh \
     init.qcom.rc \
-    init.qcom.sh \
     init.qcom.ssr.sh \
-    init.qcom.syspart_fixup.sh \
-    init.qcom.usb.sh \
     init.qcom.usb.rc \
     ueventd.qcom.rc \
-    init.carrier.rc \
-    init.target.rc
+    init.target.rc \
+    init.carrier.rc
+
+# SamsungServiceMode
+PRODUCT_PACKAGES += \
+    SamsungServiceMode
 
 # Thermal
 PRODUCT_COPY_FILES += \
@@ -217,41 +218,25 @@ PRODUCT_PACKAGES += \
     Torch
 
 # USB
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mtp
+
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
 
 # Wifi
 PRODUCT_PACKAGES += \
     dhcpcd.conf \
-    hostapd.accept \
-    hostapd.deny \
     hostapd \
-    hostapd_default.conf \
     wpa_supplicant \
     wpa_supplicant.conf
-
-PRODUCT_PACKAGES += \
-    p2p_supplicant_overlay.conf \
-    wpa_supplicant_overlay.conf
 
 PRODUCT_PACKAGES += \
     libcurl \
     libqsap_sdk \
     libQWiFiSoftApCfg \
+    libwcnss_qmi \
     wcnss_service
 
-# System properties
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.opengles.version=196608
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=/system/vendor/lib/libqc-opt.so
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.timed.enable=true
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    audio.offload.buffer.size.kb=32 \
-    audio.offload.gapless.enabled=false \
-    av.offload.enable=true \
-    media.stagefright.use-awesome=true
+# qcom common
+$(call inherit-product, device/samsung/qcom-common/qcom-common.mk)
