@@ -222,6 +222,15 @@ PRODUCT_PACKAGES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
+    hostapd.accept \
+    hostapd.deny \
+    hostapd_default.conf
+
+PRODUCT_PACKAGES += \
+    p2p_supplicant_overlay.conf \
+    wpa_supplicant_overlay.conf
+
+PRODUCT_PACKAGES += \
     dhcpcd.conf \
     hostapd \
     wpa_supplicant \
@@ -233,6 +242,11 @@ PRODUCT_PACKAGES += \
     libQWiFiSoftApCfg \
     libwcnss_qmi \
     wcnss_service
+
+PRODUCT_COPY_FILES += \
+    kernel/samsung/matissewifi-2/msm8226/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    kernel/samsung/matissewifi-2/msm8226/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
+
 
 # qcom common
 $(call inherit-product, device/samsung/qcom-common/qcom-common.mk)
