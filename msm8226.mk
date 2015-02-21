@@ -247,6 +247,5 @@ PRODUCT_COPY_FILES += \
     kernel/samsung/matissewifi-2/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
     kernel/samsung/matissewifi-2/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
 
-
 # qcom common
 $(call inherit-product, device/samsung/qcom-common/qcom-common.mk)
