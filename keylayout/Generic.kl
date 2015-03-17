@@ -259,7 +259,7 @@ key 252   DUMMY_HOME
 key 253   DUMMY_BACK
 
 # samsung
-key 254   APP_SWITCH
+key 254   MENU
 
 key 256   BUTTON_1
 key 257   BUTTON_2
