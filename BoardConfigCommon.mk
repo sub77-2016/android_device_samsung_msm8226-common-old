@@ -141,8 +141,8 @@ TARGET_USES_WCNSS_CTRL           := true
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 WIFI_DRIVER_FW_PATH_STA          := "sta"
 WIFI_DRIVER_FW_PATH_AP           := "ap"
-WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wlan.ko"
-WIFI_DRIVER_MODULE_NAME          := "wlan"
+#WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wlan.ko"
+#WIFI_DRIVER_MODULE_NAME          := "wlan"
 
 #WLAN_MODULES:
 #	mkdir -p $(KERNEL_MODULES_OUT)/pronto
