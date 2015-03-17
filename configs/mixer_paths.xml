@@ -309,15 +309,21 @@
 		<ctl name="CRADLE Switch" value="1" />
 	</path>
 
-	<path name="speaker-and-headphones">
-		<path name="spk-ear" />
-		<ctl name="HPHL Volume" value="3" />
-		<ctl name="HPHR Volume" value="3" />
-		<ctl name="RX1 Digital Volume" value="77" />
-		<ctl name="RX2 Digital Volume" value="77" />
-		<ctl name="RX4 Digital Volume" value="79" />
-		<ctl name="RX3 Digital Volume" value="79" />
-		<ctl name="CRADLE Switch" value="0" />
+	<path name="headset">
+		<path name="ear" />
+		<ctl name="HPHL Volume" value="20" />
+		<ctl name="HPHR Volume" value="20" />
+		<ctl name="RX1 Digital Volume" value="80" />
+		<ctl name="RX2 Digital Volume" value="80" />
+		<ctl name="COMP1 Switch" value="1" />
+	</path>
+
+	<path name="speaker-and-headphones">	
+		<path name="ear" />
+		<ctl name="HPHL Volume" value="20" />
+		<ctl name="HPHR Volume" value="20" />
+		<ctl name="RX1 Digital Volume" value="76" />
+		<ctl name="RX2 Digital Volume" value="76" />
 	</path>
 
 	<path name="speaker-and-hdmi">
