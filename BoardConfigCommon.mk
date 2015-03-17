@@ -24,11 +24,9 @@ TARGET_SPECIFIC_HEADER_PATH := device/samsung/msm8226-common/include
 TARGET_BOARD_PLATFORM := msm8226
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno305
 
-# Kernel
-BOARD_KERNEL_CMDLINE := console=null androidboot.console=null androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 androidboot.selinux=permissive
-BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_SEPARATED_DT := true
+#TARGET_QCOM_AUDIO_VARIANT := caf
+#TARGET_QCOM_DISPLAY_VARIANT := caf
+#TARGET_QCOM_MEDIA_VARIANT := caf
 
 # Architecture
 TARGET_CPU_VARIANT := krait
@@ -77,9 +75,6 @@ TARGET_HW_DISK_ENCRYPTION := true
 AUDIO_FEATURE_ENABLED_FM := true
 TARGET_QCOM_NO_FM_FIRMWARE := true
 
-# Lights
-TARGET_PROVIDES_LIBLIGHT := true
-
 # Power
 TARGET_POWERHAL_SET_INTERACTIVE_EXT := $(LOCAL_PATH)/power/power_ext.c
 TARGET_POWERHAL_VARIANT := qcom
@@ -119,12 +114,12 @@ WIFI_DRIVER_FW_PATH_AP           := "ap"
 WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wlan.ko"
 WIFI_DRIVER_MODULE_NAME          := "wlan"
 
-WLAN_MODULES:
-	mkdir -p $(KERNEL_MODULES_OUT)/pronto
-	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
-	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
+#WLAN_MODULES:
+#	mkdir -p $(KERNEL_MODULES_OUT)/pronto
+#	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
+#	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
 
-TARGET_KERNEL_MODULES += WLAN_MODULES
+#TARGET_KERNEL_MODULES += WLAN_MODULES
 
 # Shader cache config options
 # Maximum size of the  GLES Shaders that can be cached for reuse.
