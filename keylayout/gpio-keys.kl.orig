@@ -1,4 +1,4 @@
-# Copyright (c) 2013, The Linux Foundation. All rights reserved.
+# Copyright (c) 2012, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -24,6 +24,13 @@
 # WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 
-key 139    MENU
-key 102    HOME
-key 158    BACK
+<<<<<<< HEAD
+key 115   VOLUME_UP         WAKE_DROPPED
+key 114   VOLUME_DOWN       WAKE_DROPPED
+key 172   HOME              WAKE_DROPPED
+
+=======
+key 115   VOLUME_UP         WAKE
+key 114   VOLUME_DOWN       WAKE
+key 172   HOME              WAKE
+>>>>>>> d26a4a87980a5e2b4660251d3838b8e298cdb8a2
