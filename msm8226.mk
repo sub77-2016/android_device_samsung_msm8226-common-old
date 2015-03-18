@@ -14,13 +14,12 @@
 # limitations under the License.
 #
 
-# qcom common
-$(call inherit-product, device/samsung/qcom-common/qcom-common.mk)
+LOCAL_PATH := device/samsung/msm8226-common
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 # The gps config appropriate for this device
-$(call inherit-product, device/common/gps/gps_us_supl.mk)
+$(call inherit-product, device/common/gps/gps_as_supl.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -28,10 +27,12 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:system/etc/permissions/android.hardware.audio.low_latency.xml \
-    frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.bluetooth.xml:system/etc/permissions/android.hardware.bluetooth.xml \
+    frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
+    frameworks/native/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
+    frameworks/native/data/etc/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
     frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
     frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
@@ -47,13 +48,17 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/com.nxp.mifare.xml:system/etc/permissions/com.nxp.mifare.xml \
-    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
+    frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
+    frameworks/native/data/etc/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal hdpi xhdpi
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
-$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+# Boot animation
+TARGET_SCREEN_HEIGHT := 1280
+TARGET_SCREEN_WIDTH := 800
+
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -74,18 +79,14 @@ PRODUCT_PACKAGES += \
 # Audio configuration
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio_effects.conf:system/vendor/etc/audio_effects.conf \
+    $(LOCAL_PATH)/configs/audio_platform_info.xml:system/etc/audio_platform_info.xml \
     $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf \
-    $(LOCAL_PATH)/configs/mixer_paths.xml:system/etc/mixer_paths.xml \
-    $(LOCAL_PATH)/configs/snd_soc_msm_Tapan:system/etc/snd_soc_msm/snd_soc_msm_Tapan
+    $(LOCAL_PATH)/configs/mixer_paths.xml:system/etc/mixer_paths.xml
 
 # Camera
 PRODUCT_PACKAGES += \
+    camera.msm8226 \
     libxml2
-
-# Charger
-PRODUCT_PACKAGES += \
-charger \
-charger_res_image
 
 # CRDA
 PRODUCT_PACKAGES += \
@@ -93,6 +94,15 @@ PRODUCT_PACKAGES += \
     linville.key.pub.pem \
     regdbdump \
     regulatory.bin
+
+# Dalvik VM config for 1536MB (1.5GB) RAM devices
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.heapstartsize=8m \
+    dalvik.vm.heapgrowthlimit=128m \
+    dalvik.vm.heapsize=512m \
+    dalvik.vm.heaptargetutilization=0.75 \
+    dalvik.vm.heapminfree=2m \
+    dalvik.vm.heapmaxfree=8m
 
 # Display
 PRODUCT_PACKAGES += \
@@ -108,13 +118,6 @@ PRODUCT_PACKAGES += \
     ethertypes \
     libebtc
 
-# Filesystem
-PRODUCT_PACKAGES += \
-    fibmap.f2fs \
-    fsck.f2fs \
-    mkfs.f2fs \
-    resize2fs
-
 # FM
 PRODUCT_PACKAGES += \
     FM2 \
@@ -128,24 +131,26 @@ PRODUCT_PACKAGES += \
 
 # GPS config
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/flp.conf:/system/etc/flp.conf \
     $(LOCAL_PATH)/configs/gps.conf:system/etc/gps.conf \
     $(LOCAL_PATH)/configs/sap.conf:system/etc/sap.conf
 
-# IRSC
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sec_config:system/etc/sec_config
+# IR
+PRODUCT_PACKAGES += \
+    consumerir.msm8226
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/keylayout/atmel_mxt_ts.kl:system/usr/keylayout/atmel_mxt_ts.kl \
+    $(LOCAL_PATH)/keylayout/Generic.kl:system/usr/keylayout/Generic.kl \
+    $(LOCAL_PATH)/keylayout/Button_Jack.kl:system/usr/keylayout/Button_Jack.kl \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    $(LOCAL_PATH)/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl \
-    $(LOCAL_PATH)/keylayout/sec_e-pen.idc:system/usr/idc/sec_e-pen.idc \
-    $(LOCAL_PATH)/keylayout/sec_keyboard.idc:system/usr/idc/sec_keyboard.idc \
-    $(LOCAL_PATH)/keylayout/Synaptics_HID_TouchPad.idc:system/usr/idc/Synaptics_HID_TouchPad.idc
+    $(LOCAL_PATH)/keylayout/sec_touchkey.kl:system/usr/keylayout/sec_touchkey.kl \
+    $(LOCAL_PATH)/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
 
 # Keystore
 PRODUCT_PACKAGES += \
-    keystore.msm8226
+keystore.msm8226
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -153,18 +158,19 @@ PRODUCT_PACKAGES += \
 
 # Media
 PRODUCT_COPY_FILES += \
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_ffmpeg.xml:system/etc/media_codecs_ffmpeg.xml \
     $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
-
-# Samsung
-PRODUCT_PACKAGES += \
-charge_only_mode
 
 # OMX
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
-    libdashplayer \
     libdivxdrmdecrypt \
+    libmm-omxcore \
+    libdashplayer \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxCore \
@@ -176,16 +182,11 @@ PRODUCT_PACKAGES += \
     libstagefrighthw \
     qcmediaplayer
 
-PRODUCT_BOOT_JARS += \
-    qcmediaplayer
+PRODUCT_BOOT_JARS += qcmediaplayer
    
 # Power
 PRODUCT_PACKAGES += \
     power.msm8226
-
-# QC Perf
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=/system/lib/libqc-opt.so
 
 # QRNG
 PRODUCT_PACKAGES += \
@@ -195,47 +196,31 @@ PRODUCT_PACKAGES += \
 # Ramdisk
 PRODUCT_PACKAGES += \
     init.crda.sh \
-    init.qcom.coex.sh \
-    init.qcom.efs.sync.sh \
-    init.qcom.fm.sh \
-    init.qcom.post_boot.sh \
-    init.qcom.wifi.sh \
-    init.ath3k.bt.sh \
-    init.qcom.audio.sh \
-    hsic.control.bt.sh
+    init.qcom.bt.sh \
+    init.qcom.wifi.sh
 
 PRODUCT_PACKAGES += \
-    init.qcom.class_core.sh \
     init.qcom.rc \
     init.qcom.ssr.sh \
-    init.qcom.syspart_fixup.sh \
-    init.qcom.usb.sh \
     init.qcom.usb.rc \
     ueventd.qcom.rc \
-    init.mdm.sh \
-    init.qcom.ril.sh \
-    init.ril.rc \
     init.target.rc \
-    init.bt.rc \
-    init.carrier.rc \
-    init.qcom.early_boot.sh \
-    init.qcom.factory.sh
+    init.carrier.rc
+
+# SamsungServiceMode
+PRODUCT_PACKAGES += \
+    SamsungServiceMode
 
 # Thermal
-PRODUCT_PACKAGES += \
-    thermal-engine-8226.conf
-
-# Torch
-PRODUCT_PACKAGES += \
-    Torch
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/thermal-engine-8226.conf:system/etc/thermal-engine-8226.conf
 
 # USB
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mtp
+
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
-
-# Vold configuration
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/vold.fstab:system/etc/vold.fstab
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -248,22 +233,21 @@ PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf
 
 PRODUCT_PACKAGES += \
-    WCNSS_qcom_wlan_factory_nv.bin
+    dhcpcd.conf \
+    hostapd \
+    wpa_supplicant \
+    wpa_supplicant.conf
 
 PRODUCT_PACKAGES += \
     libcurl \
     libqsap_sdk \
     libQWiFiSoftApCfg \
+    libwcnss_qmi \
     wcnss_service
 
-# These are the hardware-specific settings that are stored in system properties.
-# Note that the only such settings should be the ones that are too low-level to
-# be reachable from resources or other mechanisms.
-PRODUCT_PROPERTY_OVERRIDES += \
-  wifi.interface=wlan0 \
-  mobiledata.interfaces=rmnet0
+PRODUCT_COPY_FILES += \
+    kernel/samsung/matissewifi/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    kernel/samsung/matissewifi/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
 
-# RIL
-#PRODUCT_PROPERTY_OVERRIDES += \
-	ro.ril.hsxpa=1 \
-	ro.ril.gprsclass=10
+# qcom common
+$(call inherit-product, device/samsung/qcom-common/qcom-common.mk)
