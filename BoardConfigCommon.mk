@@ -105,6 +105,31 @@ BOARD_USES_SEPERATED_VOIP := true
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
 
+# SELinux
+include device/qcom/sepolicy/sepolicy.mk
+
+BOARD_SEPOLICY_DIRS += device/samsung/msm8226-common/sepolicy
+
+BOARD_SEPOLICY_UNION += \
+  file_contexts \
+  file.te \
+  init.te \
+  keystore.te \
+  mediaserver.te \
+  mm-pp-daemon.te \
+  mm-qcamerad.te \
+  mpdecision.te \
+  rild.te \
+  rmt_storage.te \
+  system_app.te \
+  system_server.te \
+  tee.te \
+  thermal-engine.te \
+  time_daemon.te \
+  ueventd.te \
+  vold.te \
+  wcnss-service.te 
+
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
 BOARD_HAS_QCOM_WLAN_SDK          := true
@@ -117,15 +142,15 @@ TARGET_USES_WCNSS_CTRL           := true
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 WIFI_DRIVER_FW_PATH_STA          := "sta"
 WIFI_DRIVER_FW_PATH_AP           := "ap"
-WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wlan.ko"
-WIFI_DRIVER_MODULE_NAME          := "wlan"
+#WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wlan.ko"
+#WIFI_DRIVER_MODULE_NAME          := "wlan"
 
-WLAN_MODULES:
-	mkdir -p $(KERNEL_MODULES_OUT)/pronto
-	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
-	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
+#WLAN_MODULES:
+#	mkdir -p $(KERNEL_MODULES_OUT)/pronto
+#	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
+#	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
 
-TARGET_KERNEL_MODULES += WLAN_MODULES
+#TARGET_KERNEL_MODULES += WLAN_MODULES
 
 # Shader cache config options
 # Maximum size of the  GLES Shaders that can be cached for reuse.

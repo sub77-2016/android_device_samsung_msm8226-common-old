@@ -1,0 +1,7 @@
+--- keylayout/sec_touchkey.kl
++++ keylayout/sec_touchkey.kl
+@@ -1,4 +0,0 @@
+-key 139	  MENU      VIRTUAL	
+-key 158	  BACK		VIRTUAL		
+-key 102   HOME
+-key 217   SEARCH
