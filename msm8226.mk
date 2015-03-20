@@ -246,11 +246,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     kernel/samsung/matissewifi/drivers/staging/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
     kernel/samsung/matissewifi/drivers/staging/prima/firmware_bin/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini
-# Needed to reset bootmode when leaving recovery
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/recovery/postrecoveryboot.sh:root:/bin/postrecoveryboot.sh \
-    $(LOCAL_PATH)/recovery/postrecoveryboot.sh:recovery/root/sbin/postrecoveryboot.sh
 
 # qcom common
 $(call inherit-product, device/samsung/qcom-common/qcom-common.mk)
