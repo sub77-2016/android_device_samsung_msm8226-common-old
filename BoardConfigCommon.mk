@@ -116,28 +116,6 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
 
-BOARD_SEPOLICY_DIRS += device/samsung/msm8226-common/sepolicy
-
-BOARD_SEPOLICY_UNION += \
-  file_contexts \
-  file.te \
-  init.te \
-  keystore.te \
-  mediaserver.te \
-  mm-pp-daemon.te \
-  mm-qcamerad.te \
-  mpdecision.te \
-  rild.te \
-  rmt_storage.te \
-  system_app.te \
-  system_server.te \
-  tee.te \
-  thermal-engine.te \
-  time_daemon.te \
-  ueventd.te \
-  vold.te \
-  wcnss-service.te 
-
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
 BOARD_HAS_QCOM_WLAN_SDK          := true
