@@ -114,7 +114,34 @@ BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
 
 # SELinux
-include device/qcom/sepolicy/sepolicy.mk
+
+-include device/qcom/sepolicy/sepolicy.mk
+
+BOARD_SEPOLICY_DIRS += \
+    $(LOCAL_PATH)/sepolicy
+
+BOARD_SEPOLICY_UNION += \
+        file_contexts \
+        app.te \
+        bluetooth.te \
+        device.te \
+        domain.te \
+        drmserver.te \
+        file.te \
+        healthd.te \
+        init.te \
+        init_shell.te \
+        keystore.te \
+        mediaserver.te \
+        rild.te \
+        surfaceflinger.te \
+        system.te \
+        ueventd.te \
+        wpa.te \
+
+ifneq ($(TARGET_BUILD_VARIANT),user)
+    BOARD_SEPOLICY_UNION += su.te
+endif
 
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
