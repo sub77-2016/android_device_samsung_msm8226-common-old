@@ -60,7 +60,7 @@ QCOM_BT_USE_SMD_TTY := true
 TARGET_BOOTLOADER_BOARD_NAME := MSM8226
 
 # Camera
-BOARD_USES_LEGACY_MMAP := true
+#BOARD_USES_LEGACY_MMAP := true
 TARGET_PROVIDES_CAMERA_HAL := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 
@@ -101,7 +101,6 @@ COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_USERIMAGES_USE_EXT4 := true
 
-
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
 
@@ -116,9 +115,9 @@ BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
 
 # SELinux
-
+#
 -include device/qcom/sepolicy/sepolicy.mk
-
+#
 BOARD_SEPOLICY_DIRS += \
     $(LOCAL_PATH)/sepolicy
 
@@ -135,7 +134,6 @@ BOARD_SEPOLICY_UNION += \
         init_shell.te \
         keystore.te \
         mediaserver.te \
-        rild.te \
         surfaceflinger.te \
         system.te \
         ueventd.te \
