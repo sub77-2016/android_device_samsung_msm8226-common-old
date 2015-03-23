@@ -118,26 +118,31 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/
 #
 -include device/qcom/sepolicy/sepolicy.mk
 #
+ifneq ($(TARGET_BUILD_VARIANT),user)
 BOARD_SEPOLICY_DIRS += \
     $(LOCAL_PATH)/sepolicy
+endif
 
-BOARD_SEPOLICY_UNION += \
-        file_contexts \
-        app.te \
-        bluetooth.te \
-        device.te \
-        domain.te \
-        drmserver.te \
-        file.te \
-        healthd.te \
-        init.te \
-        init_shell.te \
-        keystore.te \
-        mediaserver.te \
-        surfaceflinger.te \
-        system.te \
-        ueventd.te \
-        wpa.te \
+ifneq ($(TARGET_BUILD_VARIANT),user)
+BOARD_SEPOLICY_UNION +=        file_contexts 
+BOARD_SEPOLICY_UNION +=        app.te 
+BOARD_SEPOLICY_UNION +=        bluetooth.te 
+BOARD_SEPOLICY_UNION +=        device.te 
+BOARD_SEPOLICY_UNION +=        domain.te 
+BOARD_SEPOLICY_UNION +=        drmserver.te 
+BOARD_SEPOLICY_UNION +=        file.te 
+BOARD_SEPOLICY_UNION +=        healthd.te 
+BOARD_SEPOLICY_UNION +=        init.te 
+BOARD_SEPOLICY_UNION +=       init_shell.te 
+BOARD_SEPOLICY_UNION +=        keystore.te 
+BOARD_SEPOLICY_UNION +=       mediaserver.te 
+BOARD_SEPOLICY_UNION +=        surfaceflinger.te 
+BOARD_SEPOLICY_UNION +=        system.te 
+BOARD_SEPOLICY_UNION +=        ueventd.te 
+BOARD_SEPOLICY_UNION +=        wpa.te 
+endif
+
+
 
 ifneq ($(TARGET_BUILD_VARIANT),user)
     BOARD_SEPOLICY_UNION += su.te
