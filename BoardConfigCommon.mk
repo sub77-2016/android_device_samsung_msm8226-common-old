@@ -60,7 +60,7 @@ QCOM_BT_USE_SMD_TTY := true
 TARGET_BOOTLOADER_BOARD_NAME := MSM8226
 
 # Camera
-BOARD_USES_LEGACY_MMAP := true
+#BOARD_USES_LEGACY_MMAP := true
 TARGET_PROVIDES_CAMERA_HAL := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 
@@ -99,6 +99,7 @@ BOARD_RECOVERY_SWIPE := true
 #BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
+TARGET_USERIMAGES_USE_EXT4 := true
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
@@ -114,7 +115,33 @@ BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
 
 # SELinux
-include device/qcom/sepolicy/sepolicy.mk
+#
+-include device/qcom/sepolicy/sepolicy.mk
+#
+BOARD_SEPOLICY_DIRS += \
+    $(LOCAL_PATH)/sepolicy
+
+BOARD_SEPOLICY_UNION += \
+        file_contexts \
+        app.te \
+        bluetooth.te \
+        device.te \
+        domain.te \
+        drmserver.te \
+        file.te \
+        healthd.te \
+        init.te \
+        init_shell.te \
+        keystore.te \
+        mediaserver.te \
+        surfaceflinger.te \
+        system.te \
+        ueventd.te \
+        wpa.te \
+
+ifneq ($(TARGET_BUILD_VARIANT),user)
+    BOARD_SEPOLICY_UNION += su.te
+endif
 
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
@@ -124,12 +151,12 @@ BOARD_HOSTAPD_DRIVER             := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+TARGET_PROVIDES_WCNSS_QMI        := true
+TARGET_USES_QCOM_WCNSS_QMI       := true
 TARGET_USES_WCNSS_CTRL           := true
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 WIFI_DRIVER_FW_PATH_STA          := "sta"
 WIFI_DRIVER_FW_PATH_AP           := "ap"
-#WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wlan.ko"
-#WIFI_DRIVER_MODULE_NAME          := "wlan"
 
 #WLAN_MODULES:
 #	mkdir -p $(KERNEL_MODULES_OUT)/pronto
