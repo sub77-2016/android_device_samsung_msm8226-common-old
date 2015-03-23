@@ -24,9 +24,17 @@ TARGET_SPECIFIC_HEADER_PATH := device/samsung/msm8226-common/include
 TARGET_BOARD_PLATFORM := msm8226
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno305
 
+# Compiler Optimization
+ARCH_ARM_HIGH_OPTIMIZATION := true
+ARCH_ARM_HIGH_OPTIMIZATION_COMPAT := true
+TARGET_USE_O3 := true
+# Optimisations used by Qualcomm
+TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
+
 # Kernel
-BOARD_KERNEL_CMDLINE := console=null androidboot.console=null androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_CMDLINE := console=null androidboot.console=null androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 androidboot.selinux=permissive
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
 
@@ -41,9 +49,6 @@ BOARD_USES_ALSA_AUDIO := true
 TARGET_USES_QCOM_COMPRESSED_AUDIO := true
 AUDIO_FEATURE_ENABLED_FM := true
 
-TARGET_QCOM_AUDIO_VARIANT := caf
-
-
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(LOCAL_PATH)/bluetooth
 BOARD_HAVE_BLUETOOTH := true
@@ -55,7 +60,7 @@ QCOM_BT_USE_SMD_TTY := true
 TARGET_BOOTLOADER_BOARD_NAME := MSM8226
 
 # Camera
-BOARD_USES_LEGACY_MMAP := true
+#BOARD_USES_LEGACY_MMAP := true
 TARGET_PROVIDES_CAMERA_HAL := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 
@@ -70,12 +75,8 @@ BOARD_HARDWARE_CLASS := $(LOCAL_PATH)/cmhw
 
 # Display
 BOARD_EGL_CFG := $(LOCAL_PATH)/configs/egl.cfg
-#NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
-
-TARGET_QCOM_DISPLAY_VARIANT := caf
-TARGET_QCOM_MEDIA_VARIANT := caf
-
 
 # Encryption
 TARGET_HW_DISK_ENCRYPTION := true
@@ -97,7 +98,8 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_RECOVERY_SWIPE := true
 #BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
-
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
+TARGET_USERIMAGES_USE_EXT4 := true
 
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
@@ -112,6 +114,40 @@ BOARD_USES_SEPERATED_VOIP := true
 BOARD_VOLD_EMMC_SHARES_DEV_MAJOR := true
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
 
+# SELinux
+#
+-include device/qcom/sepolicy/sepolicy.mk
+#
+ifneq ($(TARGET_BUILD_VARIANT),user)
+BOARD_SEPOLICY_DIRS += \
+    $(LOCAL_PATH)/sepolicy
+endif
+
+ifneq ($(TARGET_BUILD_VARIANT),user)
+BOARD_SEPOLICY_UNION +=        file_contexts 
+BOARD_SEPOLICY_UNION +=        app.te 
+BOARD_SEPOLICY_UNION +=        bluetooth.te 
+BOARD_SEPOLICY_UNION +=        device.te 
+BOARD_SEPOLICY_UNION +=        domain.te 
+BOARD_SEPOLICY_UNION +=        drmserver.te 
+BOARD_SEPOLICY_UNION +=        file.te 
+BOARD_SEPOLICY_UNION +=        healthd.te 
+BOARD_SEPOLICY_UNION +=        init.te 
+BOARD_SEPOLICY_UNION +=       init_shell.te 
+BOARD_SEPOLICY_UNION +=        keystore.te 
+BOARD_SEPOLICY_UNION +=       mediaserver.te 
+BOARD_SEPOLICY_UNION +=        surfaceflinger.te 
+BOARD_SEPOLICY_UNION +=        system.te 
+BOARD_SEPOLICY_UNION +=        ueventd.te 
+BOARD_SEPOLICY_UNION +=        wpa.te 
+endif
+
+
+
+ifneq ($(TARGET_BUILD_VARIANT),user)
+    BOARD_SEPOLICY_UNION += su.te
+endif
+
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
 BOARD_HAS_QCOM_WLAN_SDK          := true
@@ -120,19 +156,19 @@ BOARD_HOSTAPD_DRIVER             := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+TARGET_PROVIDES_WCNSS_QMI        := true
+TARGET_USES_QCOM_WCNSS_QMI       := true
 TARGET_USES_WCNSS_CTRL           := true
 WPA_SUPPLICANT_VERSION           := VER_0_8_X
 WIFI_DRIVER_FW_PATH_STA          := "sta"
 WIFI_DRIVER_FW_PATH_AP           := "ap"
-WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wlan.ko"
-WIFI_DRIVER_MODULE_NAME          := "wlan"
 
-WLAN_MODULES:
-	mkdir -p $(KERNEL_MODULES_OUT)/pronto
-	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
-	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
+#WLAN_MODULES:
+#	mkdir -p $(KERNEL_MODULES_OUT)/pronto
+#	mv $(KERNEL_MODULES_OUT)/wlan.ko $(KERNEL_MODULES_OUT)/pronto/pronto_wlan.ko
+#	ln -sf /system/lib/modules/pronto/pronto_wlan.ko $(TARGET_OUT)/lib/modules/wlan.ko
 
-TARGET_KERNEL_MODULES += WLAN_MODULES
+#TARGET_KERNEL_MODULES += WLAN_MODULES
 
 # Shader cache config options
 # Maximum size of the  GLES Shaders that can be cached for reuse.
